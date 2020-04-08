@@ -1,20 +1,32 @@
 ---
-title: "R Notebook"
+title: "STAT 184 Final Project: Exploratory Data Analysis"
 output: html_notebook
-name: "Jordan Williard"
+author: "Jordan Williard"
 date: "April 7th, 2020"
 ---
 
 # Guiding Question (i.e., Research Question): Make a clear statement of a single guiding/research question that will drive your analysis.  It should be phrased as a question that you will try to investigate (i.e., it should have a question mark) 
 
-How has the landscape of political ideology changed throughout the past 100 years? Which states have experienced the most change? Are there any notable long term trends?
+How has the landscape of American political ideology changed throughout the past 100 years? Which states have experienced the most change? Are there any notable long term trends?
 
 # Become acquainted with your data sources:
 * Where did you find them?
 
+    Data Source 1: Comparative Political Dataset (https://www.cpds-data.org/). I found this by searching and comparing various political datasets. 
+  
+    Data Source 2: US Population by Zip Code (https://data.world/lukewhyte/us-population-by-zip-code-2010-2016. I want to include demographic data in this analysis. This             dataset has a good cross section of years leading up to present day politics. 
+
 * Who collected/maintains them?
+    
+    Data Source 1 is maintained by Prof. Dr. Klaus Armingeon and collaborators at the University of Zurich. 
+    
+    Data Source 2 was aggregated by a user on data.world. The data comes from 5-year American Surveys and the 2010 Decennial Census
 
 * When & Why were they originally collected?
+    
+    The data in Data Source 1, the CPDS, has been collected since 1960 in many democratic countries. The goal is to better understand the political landscape of democratic       countries across the globe. I'll be focusing on the United States. 
+    
+    The data in Data Source 2 has been collected by the United States government for demographic purposes. These surveys allow the government to better understand who and        where people are living. 
 
 * What does a case represent in each data source, and how many total cases are available?
 
