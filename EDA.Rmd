@@ -79,21 +79,59 @@ mean(ZipPop$y.2010)
 mean(ZipPop$y.2016)
 ```
 
+```{r}
+ZipPopMean <-
+  ZipPop %>%
+  mutate("mean2010" = mean(y.2010),
+         "mean2011" = mean(y.2011),
+         "mean2012" = mean(y.2012),
+         "mean2013" = mean(y.2013),
+         "mean2014" = mean(y.2014),
+         "mean2015" = mean(y.2015),
+         "mean2016" = mean(y.2016),
+         ) %>%
+  select(mean2010, mean2011, mean2012, mean2013, mean2014, mean2015, mean2016)
+
+ avg_sizes <- ZipPopMean[!duplicated(ZipPopMean$mean2010),]
+ 
+ avg_sizes
+```
+
+
 CPDS: Simple Graphs
 ```{r}
-
+CPDS %>%
+  ggplot(aes(x=year, y=elderly)) + 
+  geom_line()
 ```
 
-
-ZipPop: Simple Graph
 ```{r}
-
+CPDS %>%
+  ggplot(aes(x=year, y=inflation)) + 
+  geom_line()
 ```
+
+
+```{r}
+CPDS %>%
+  ggplot(aes(x=year, y=realgdpgr)) + 
+  geom_line()
+```
+
+
+
+
 
 
 * Describe preliminary observations and intuition about the research question
 
+The following are some observations I've made by exploring this data:
 
+    * The proportion of elderly in the United States has been steadily increasing. Age is an important determinant to political ideology, so I think that this will be important.
+    
+    * Different metrics that represent the economic situation in the United States have not been largely correlated over the years. A decrease in GDP and an increase in inflation is indicative of a situation impacting all segments of society. However, a decrease in GDP without an increase in inflation is indicative of a market       acting less favorable towards business owners/manufacturers. The disparity in these two metrics throughout the years, coupled with observations of political ideology   will tell me how different financial events impact politics. 
+    
+    * ZipPopMean tells us that the average number of residents reported since 2010 has not significantly gone up. This tells us that the Unites States population is largely stagnant (can be confirmed with other sources). That being said, it furthers my interest in changes for particular regions as well as the impacts that survey methodology may produce (immigrants not participating in a Census for example).
 
 
 
