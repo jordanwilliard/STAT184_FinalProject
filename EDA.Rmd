@@ -42,6 +42,61 @@ How has the landscape of American political ideology changed throughout the past
 
 
 # Explore intuition related to the research question
+
+### Loading Data
+```{r}
+
+library(DataComputing)
+
+CPDS <- read.csv("CPDS-1960-2017-Update-2019.csv")
+ZipPop <- read.csv("pop-by-zip-code.csv")
+
+head(CPDS)
+head(ZipPop)
+```
+
 * Create some informative plots and summary statistics 
 
+
+CPDS: Simple summary statisitcs
+```{r}
+CPDS <-
+  CPDS %>%
+  select(year, country, realgdpgr, inflation, pop, elderly) %>%
+  filter(country == "USA")
+
+summary(CPDS)
+CPDS$year[CPDS$inflation == min(CPDS$inflation)]
+CPDS$year[CPDS$realgdpgr == min(CPDS$realgdpgr, na.rm = TRUE)]
+CPDS$year[CPDS$elderly == max(CPDS$elderly, na.rm = TRUE)]
+CPDS$year[CPDS$elderly == min(CPDS$elderly, na.rm = TRUE)]
+```
+
+ZipPop: Simple summary statisitcs
+```{r}
+summary(ZipPop)
+mean(ZipPop$y.2010)
+mean(ZipPop$y.2016)
+```
+
+CPDS: Simple Graphs
+```{r}
+
+```
+
+
+ZipPop: Simple Graph
+```{r}
+
+```
+
+
 * Describe preliminary observations and intuition about the research question
+
+
+
+
+
+
+
+
