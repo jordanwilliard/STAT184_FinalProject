@@ -30,18 +30,18 @@ How has the landscape of American political ideology changed throughout the past
 
 * What does a case represent in each data source, and how many total cases are available?
 
+    In Data Source 1, a case represents the political, social, and demographic information for one country, during one year. 
+    
+    In Data Source 2, a case represents the population of a zip code for years 2010-2016.
+
 * What are some of the variables that you plan to use
 
-* The R Notebook should include R code chunks & output as well as narrative (bullet list is fine at this stage) as you answer these questions
+    Data Source 1 has over 300 columns, so I will need to be selective with what I use. That being said, I am most interested in understanding changes in the American            political system as well as what opinions may be causing them. So, to start I am going to use: Total population, elderly population, political spectrums (varying           categorical degrees of left --> right), religion metrics, and protest information (could be indicative of unrest/revolution). This is just a start and I imagine that       I'll end up using many more.
+    
+    Simply put, I'm going to use all of the variables from Data Source 2. This data is extremely narrow, but will allow me to better understand demographic transitions         across regions of the United States. So, I will be using the Zip Code variable as well as all 7 years of population information. 
+
 
 # Explore intuition related to the research question
 * Create some informative plots and summary statistics 
 
 * Describe preliminary observations and intuition about the research question
-
-# TWO Data Sources (at least)
-* Primary data:  This is the main data source to be used in your investigation and it MUST NOT be loaded directly from an R package (but API's are fine for example). You should have many cases (e.g., at least hundreds--preferably many thousands), many variables including a mixture of both categorical & quantitative variables.  
-
-* Other data sources: No problem for these to come from an R package--for example, the ZipGeography or ZipDemography data (from DataComputing package) might be useful when joined with primary sources as you investigate some phenomenon in the US. 
-
-* Note: Each data source should be less than 80-100MB--the maximum file size permitted in a GitHub Repo... use sampling to create a reduced version for the purpose of the project if needed as we've done occasionally in exercises and weekly activities.
