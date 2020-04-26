@@ -1,7 +1,7 @@
 ---
 title: 'Final Project: Guidance Document'
-author: "Author Name(s)"
-date: "Due December 17, 2019"
+author: "Jordan Williard"
+date: "Due April 26, 2020"
 output:  html_notebook
 ---
 
@@ -17,10 +17,10 @@ output:  html_notebook
 
 *Description: (1) Analysis includes at least two different data sources. (2) Primary data source may NOT be loaded from an R package--though supporting data may. (3) Access to all data sources is contained within the analysis. (4) Imported data is inspected at beginning of analysis using one or more R functions: e.g., str, glimpse, head, tail, names, nrow, etc*
 
-(A) .Rmd Line numbers where at least two different data sources are imported:  
+(A) .Rmd Line numbers where at least two different data sources are imported: 25 & 26
 
 
-(B) .Rmd Line numbers for inspecting data intake:  
+(B) .Rmd Line numbers for inspecting data intake: 28 & 29
 
 
 ### Data Wrangling (5 out of 8 required)

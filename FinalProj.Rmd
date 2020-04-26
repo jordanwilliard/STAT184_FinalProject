@@ -5,7 +5,32 @@ date: "4/26/2020"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+### Workspace Initialization
+
+```{r}
+library(DataComputing)
 ```
 
+
+
+### Introduction
+America is on shaky political ground. The gap between left and right ideologies has been increasing to the point that the resulting tensions are almost to be expected. Fundamental differences between the ways that people view religion, abortion, immigration, and gun ownership, just to name a few, have created a polarized climate. As we approach the upcoming election cycle, it's valuable for campaigns and constituents alike to understand the ideological differences and shifts that are occuring in this nation. The following analysis is intended to observe these trends and answer the follow questions:  
+
+
+### Data Access
+
+Two data sets will be used for this analysis. The first is called the Comparative Political Data Set and contains information on demographic, political, and ideological characteristics for many countries from 1960 to 2017. In this data set, a case represents the political, social, and demographic information for one country, during one year. The second data set contains data collected 5 Year Surveys and Censi that has been aggregated by data.world. This data set can be used to observe population trends across America throughout the years. In this data set, a case represents the population for one zip code for years 2020-2016. 
+
+```{r}
+CPDS <- read.csv("CPDS-1960-2017-Update-2019.csv")
+ZipPop <- read.csv("pop-by-zip-code.csv")
+
+head(CPDS)
+head(ZipPop)
+```
+
+
+### Data Wrangling
+
+
+### Data Visualizations
