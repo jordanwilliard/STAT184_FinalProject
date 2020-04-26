@@ -9,6 +9,7 @@ output: html_document
 
 ```{r}
 library(DataComputing)
+library(tidyr)
 ```
 
 
@@ -19,7 +20,7 @@ America is on shaky political ground. The gap between left and right ideologies 
 
 ### Data Access
 
-Two data sets will be used for this analysis. The first is called the Comparative Political Data Set and contains information on demographic, political, and ideological characteristics for many countries from 1960 to 2017. In this data set, a case represents the political, social, and demographic information for one country, during one year. The second data set contains data collected 5 Year Surveys and Censi that has been aggregated by data.world. This data set can be used to observe population trends across America throughout the years. In this data set, a case represents the population for one zip code for years 2020-2016. 
+Two data sets will be used for this analysis. The first is called the Comparative Political Data Set and contains information on demographic, political, and ideological characteristics for 36 countries from 1960 to 2017. In this data set, a case represents the political, social, and demographic information for one country, during one year. The second data set contains data collected 5 Year Surveys and Censi that has been aggregated by data.world. This data set can be used to observe population trends across America throughout the years. In this data set, a case represents the population for one zip code for years 2020-2016. 
 
 ```{r}
 CPDS <- read.csv("CPDS-1960-2017-Update-2019.csv")
@@ -30,7 +31,63 @@ head(ZipPop)
 ```
 
 
-### Data Wrangling
+## Data Wrangling
 
+### 1
+Because I am only interested in American politics, I am going to begin by filtering the CPDS dataframe to only include cases pertaining to the US. There are also many columns that will not be useful for this analysis. The relevant fields are gathered with select(). Descriptions for these fields are as follows:
 
-### Data Visualizations
+* 1. year: Year of data collection.
+
+* 2. country: Country that data pertains to (Only USA after filtering).
+
+* 3. gov_right1: The percentage of cabinet seats held by right wing politicians.
+
+* 4. gov_cent1: The percentage of cabinet seats held by centrist politicians.
+
+* 5. vturn: Voter turnout in election. 
+
+* 6. pop: Total country population
+
+* 7. elderly: Percentage of the population that is 65 years or older. 
+
+* 8. unemp: Amount of civilians of working age who are unemployed. 
+
+* 9. debt: Amount of debt accumulated in the year, expressed as percent of GDP.
+
+* 10. realgdpgr: Percent growth of GDP as compared to the previous year.
+
+An interesting observation from this is that left wing government composition is always zero in this data. Within America, this may not make sense, but on the world stage America does not have a left leaning arm of government. For this reason, I'm only gathering central and right ideology. 
+
+```{r}
+CPDS_US <-
+  CPDS %>% 
+  filter(country == "USA") %>%
+  select(year, country, gov_right1, gov_cent1, vturn, pop, elderly, unemp, debt, realgdpgr)
+
+head(CPDS_US)
+```
+
+### 2
+By using machine learning to create a linear regression on this data, we observe several interesting relationships in the data. Here, elderly, unemployment rates, debt, and gdp data is being used to predict the prevalence of right wing ideologies in governemnt. We can see that the amount of elderly population as well as the amount of debt acrued in a single year are statistically significant. 
+
+```{r}
+linearMod <- lm(gov_right1 ~ elderly + unemp + debt + realgdpgr, data=CPDS_US)
+
+summary(linearMod)
+
+```
+
+### 3 
+The data in ZipPop is obviously not in a tidy format. In its initial state, a case represents a zip codes population across all years (2010-2016). Fortunately, a call to the wrangling function gather() can transform this into tidy data in which each case represents the population for a single zip code, in a single year. 
+
+```{r}
+ZipPopNarrow <-
+  ZipPop %>%
+  gather(Year, Value, -zip_code)
+head(ZipPopNarrow)
+nrow(ZipPopNarrow)
+```
+
+### 4
+
+## Data Visualizations

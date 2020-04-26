@@ -197,6 +197,7 @@ summary {
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
 <pre><code>## Loading required package: ggplot2</code></pre>
+<pre class="r"><code>library(tidyr)</code></pre>
 </div>
 <div id="introduction" class="section level3">
 <h3>Introduction</h3>
@@ -204,7 +205,7 @@ summary {
 </div>
 <div id="data-access" class="section level3">
 <h3>Data Access</h3>
-<p>Two data sets will be used for this analysis. The first is called the Comparative Political Data Set and contains information on demographic, political, and ideological characteristics for many countries from 1960 to 2017. In this data set, a case represents the political, social, and demographic information for one country, during one year. The second data set contains data collected 5 Year Surveys and Censi that has been aggregated by data.world. This data set can be used to observe population trends across America throughout the years. In this data set, a case represents the population for one zip code for years 2020-2016.</p>
+<p>Two data sets will be used for this analysis. The first is called the Comparative Political Data Set and contains information on demographic, political, and ideological characteristics for 36 countries from 1960 to 2017. In this data set, a case represents the political, social, and demographic information for one country, during one year. The second data set contains data collected 5 Year Surveys and Censi that has been aggregated by data.world. This data set can be used to observe population trends across America throughout the years. In this data set, a case represents the population for one zip code for years 2020-2016.</p>
 <pre class="r"><code>CPDS &lt;- read.csv(&quot;CPDS-1960-2017-Update-2019.csv&quot;)
 ZipPop &lt;- read.csv(&quot;pop-by-zip-code.csv&quot;)
 
@@ -498,11 +499,111 @@ head(CPDS)</code></pre>
 ## 5      610  27976  28328  28805  28963  29141  29111  29016    201340
 ## 6      612  63884  64816  66251  68055  69017  70541  67010    469574</code></pre>
 </div>
-<div id="data-wrangling" class="section level3">
-<h3>Data Wrangling</h3>
+<div id="data-wrangling" class="section level2">
+<h2>Data Wrangling</h2>
+<div id="section" class="section level3">
+<h3>1</h3>
+<p>Because I am only interested in American politics, I am going to begin by filtering the CPDS dataframe to only include cases pertaining to the US. There are also many columns that will not be useful for this analysis. The relevant fields are gathered with select(). Descriptions for these fields are as follows:</p>
+<ul>
+<li><ol style="list-style-type: decimal">
+<li>year: Year of data collection.</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: decimal">
+<li>country: Country that data pertains to (Only USA after filtering).</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: decimal">
+<li>gov_right1: The percentage of cabinet seats held by right wing politicians.</li>
+</ol></li>
+<li><ol start="4" style="list-style-type: decimal">
+<li>gov_cent1: The percentage of cabinet seats held by centrist politicians.</li>
+</ol></li>
+<li><ol start="5" style="list-style-type: decimal">
+<li>vturn: Voter turnout in election.</li>
+</ol></li>
+<li><ol start="6" style="list-style-type: decimal">
+<li>pop: Total country population</li>
+</ol></li>
+<li><ol start="7" style="list-style-type: decimal">
+<li>elderly: Percentage of the population that is 65 years or older.</li>
+</ol></li>
+<li><ol start="8" style="list-style-type: decimal">
+<li>unemp: Amount of civilians of working age who are unemployed.</li>
+</ol></li>
+<li><ol start="9" style="list-style-type: decimal">
+<li>debt: Amount of debt accumulated in the year, expressed as percent of GDP.</li>
+</ol></li>
+<li><ol start="10" style="list-style-type: decimal">
+<li>realgdpgr: Percent growth of GDP as compared to the previous year.</li>
+</ol></li>
+</ul>
+<p>An interesting observation from this is that left wing government composition is always zero in this data. Within America, this may not make sense, but on the world stage America does not have a left leaning arm of government. For this reason, I’m only gathering central and right ideology.</p>
+<pre class="r"><code>CPDS_US &lt;-
+  CPDS %&gt;% 
+  filter(country == &quot;USA&quot;) %&gt;%
+  select(year, country, gov_right1, gov_cent1, vturn, pop, elderly, unemp, debt, realgdpgr)
+
+head(CPDS_US)</code></pre>
+<pre><code>##   year country gov_right1 gov_cent1 vturn    pop elderly unemp  debt realgdpgr
+## 1 1960     USA      92.31      7.69  61.0 180760    9.22   5.5 59.92        NA
+## 2 1961     USA      11.12     88.88  61.0 183742    9.30   6.7 60.33      2.55
+## 3 1962     USA       6.67     93.33  47.5 186590    9.36   5.5 58.35      6.12
+## 4 1963     USA       6.74     93.26  47.5 189300    9.39   5.7 57.00      4.35
+## 5 1964     USA       7.14     92.86  59.7 191927    9.44   5.2 54.99      5.77
+## 6 1965     USA      14.20     85.80  59.7 194347    9.49   4.5 52.05      6.50</code></pre>
 </div>
-<div id="data-visualizations" class="section level3">
-<h3>Data Visualizations</h3>
+<div id="section-1" class="section level3">
+<h3>2</h3>
+<p>By using machine learning to create a linear regression on this data, we observe several interesting relationships in the data. Here, elderly, unemployment rates, debt, and gdp data is being used to predict the prevalence of right wing ideologies in governemnt. We can see that the amount of elderly population as well as the amount of debt acrued in a single year are statistically significant.</p>
+<pre class="r"><code>linearMod &lt;- lm(gov_right1 ~ elderly + unemp + debt + realgdpgr, data=CPDS_US)
+
+summary(linearMod)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = gov_right1 ~ elderly + unemp + debt + realgdpgr, 
+##     data = CPDS_US)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -98.580 -25.969  -3.517  37.180  48.866 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  10.7157    57.9852   0.185  0.85412    
+## elderly      12.9273     5.9090   2.188  0.03330 *  
+## unemp         2.1402     3.6855   0.581  0.56400    
+## debt         -1.8164     0.4583  -3.964  0.00023 ***
+## realgdpgr    -3.9931     2.8160  -1.418  0.16227    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 39.79 on 51 degrees of freedom
+##   (2 observations deleted due to missingness)
+## Multiple R-squared:  0.2745, Adjusted R-squared:  0.2176 
+## F-statistic: 4.825 on 4 and 51 DF,  p-value: 0.002232</code></pre>
+</div>
+<div id="section-2" class="section level3">
+<h3>3</h3>
+<p>The data in ZipPop is obviously not in a tidy format. In its initial state, a case represents a zip codes population across all years (2010-2016). Fortunately, a call to the wrangling function gather() can transform this into tidy data in which each case represents the population for a single zip code, in a single year.</p>
+<pre class="r"><code>ZipPopNarrow &lt;-
+  ZipPop %&gt;%
+  gather(Year, Value, -zip_code)
+head(ZipPopNarrow)</code></pre>
+<pre><code>##   zip_code   Year Value
+## 1      601 y.2016 17800
+## 2      602 y.2016 39716
+## 3      603 y.2016 51565
+## 4      606 y.2016  6320
+## 5      610 y.2016 27976
+## 6      612 y.2016 63884</code></pre>
+<pre class="r"><code>nrow(ZipPopNarrow)</code></pre>
+<pre><code>## [1] 264960</code></pre>
+</div>
+<div id="section-3" class="section level3">
+<h3>4</h3>
+</div>
+</div>
+<div id="data-visualizations" class="section level2">
+<h2>Data Visualizations</h2>
 </div>
 
 
