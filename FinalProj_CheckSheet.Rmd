@@ -34,13 +34,13 @@ output:  html_notebook
 (B) .Rmd Line number(s) for a join operation: Not used. 
 
 
-(C) .Rmd Line number(s) for a spread or gather operation (or equivalent): **109**
+(C) .Rmd Line number(s) for a spread or gather operation (or equivalent): **107**
 
 
-(D) .Rmd Line number(s) for use of regular expressions: **120**
+(D) .Rmd Line number(s) for use of regular expressions: **118**
 
 
-(E) .Rmd Line number(s) for use of reduction and/or transformation functions: **89-94**
+(E) .Rmd Line number(s) for use of reduction and/or transformation functions: **86-94**
 
 
 (F) .Rmd Line number(s) for use of user-defined functions: Not used. 
@@ -49,7 +49,7 @@ output:  html_notebook
 (G) .Rmd Line number(s) for use of loops and/or control flow: Not used. 
 
 
-(H) .Rmd Line number(s) for use of machine learning (not "wrangling" but scored here): **75 & 77**
+(H) .Rmd Line number(s) for use of machine learning (not "wrangling" but scored here): **74 & 76**
 
 
 
@@ -58,15 +58,15 @@ output:  html_notebook
 *Description: Students need not use every function and method introduced in STAT 184, but clear demonstration of proficiency should include a range of useful of data visualizations that are (1) relevant to stated research question for the analysis, (2) include at least one effective display of many--at least 3--variables, and (3) include 3 of the following 5 visualization techniques learned in STAT 184: (+) use of multiple geoms such as points, density, lines, segments, boxplots, bar charts, histograms, etc (+) use of multiple aesthetics--not necessarily all in the same graph--such as color, size, shape, x/y position, facets, etc (+) layered graphics such as points and accompanying smoother, points and accompanying boxplots, overlaid density distributions, etc (+) leaflet maps (+) decision tree and/or dendogram displaying machine learning model results*
 
 
-(A) .Rmd Line number(s) for use of mulitple different geoms:  
+(A) .Rmd Line number(s) for use of mulitple different geoms: **130 & 131** 
 
-(B) .Rmd Line number(s) for use of multiple aesthetics: 129
+(B) .Rmd Line number(s) for use of multiple aesthetics: **129**
 
-(C) .Rmd Line number(s) for use of layered graphics:  
+(C) .Rmd Line number(s) for use of layered graphics: Not used.
 
-(D) .Rmd Line number(s) for use of leaflet maps:  
+(D) .Rmd Line number(s) for use of leaflet maps: Not used.
 
-(E) .Rmd Line number(s) for use of decision tree or dendogram results:    
+(E) .Rmd Line number(s) for use of decision tree or dendogram results: **154**
 
 
 
@@ -82,6 +82,8 @@ output:  html_notebook
 (D) *Overall Quality:* Submitted project shows significant effort to produce a high-quality and thoughtful analysis that showcases STAT 184 skills. (2) The project must be self-contained, such that the analysis can be entirely rerun without errors. (3) Analysis is coherent, well-organized, and free of extraneous content such as data dumps, unrelated graphs, and other content that is not overtly connected to the research question.
 
 (E) *EXTRA CREDIT* (1) Project is submitted as a self-contained GitHub Repo (2) project submission is a functioning github.io webpage generated for the project Repo. Note: a link to the GitHub Repo itself will be awarded partial credit, but does not itself qualify as a "webpage" of the analysis.
+
+** GitHub Repo Link: https://github.com/jordanwilliard/STAT184_FinalProject **
 
 
 

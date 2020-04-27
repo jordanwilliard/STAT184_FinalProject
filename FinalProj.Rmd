@@ -15,15 +15,15 @@ library(tidyr)
 
 
 ### Introduction
-America is on shaky political ground. The gap between left and right ideologies has been increasing to the point that the resulting tensions are almost to be expected. Fundamental differences between the ways that people view religion, abortion, immigration, and gun ownership, just to name a few, have created a polarized climate. As we approach the upcoming election cycle, it's valuable for campaigns and constituents alike to understand the ideological differences and shifts that are occuring in this nation. The following analysis is intended to observe these trends and answer the follow questions: What demographic trends exist in the United States and how do they relate to ideology within government?
+America is on shaky political ground. The gap between left and right ideologies has been increasing to the point that the resulting tensions are almost to be expected. Fundamental differences between the ways that people view religion, abortion, immigration, and gun ownership, just to name a few, have created a polarized climate. As we approach the upcoming election cycle, it's valuable for campaigns and constituents alike to understand the ideological differences and shifts that are occuring in this nation. The following analysis is intended to observe these trends and answer the follow questions: What demographic trends exist in the United States and how do they relate to ideology within government? **GitHub Repo URL: https://github.com/jordanwilliard/STAT184_FinalProject **
 
 
 ### Data Access
 
-Two data sets will be used for this analysis. The first is called the Comparative Political Data Set and contains information on demographic, political, and ideological characteristics for 36 countries from 1960 to 2017. In this data set, a case represents the political, social, and demographic information for one country, during one year. The second data set contains data collected 5 Year Surveys and Censi that has been aggregated by data.world. This data set can be used to observe population trends across America throughout the years. In this data set, a case represents the population for one zip code for years 2020-2016. 
+Two data sets will be used for this analysis. The first is called the Comparative Political Data Set and contains information on demographic, political, and ideological characteristics for 36 countries from 1960 to 2017. In this data set, a case represents the political, social, and demographic information for one country, during one year. The second data set contains data collected 5 Year Surveys and Censi that has been aggregated by data.world. This data set can be used to observe population trends across America throughout the years. In this data set, a case represents the population for one zip code for years 2010-2016. 
 
 ```{r}
-CPDS <- read.csv("CPDS-1960-2017-Update-2019.csv")
+CPDS <- read.csv("CPDS-1960-2017-Update-2019.csv") # Loading data
 ZipPop <- read.csv("pop-by-zip-code.csv")
 
 # head(CPDS) This is commented out simply to create a cleaner html document. Since the data has 319 columns, it takes up a lot of space when knit to html. 
@@ -61,17 +61,17 @@ An interesting observation from this is that left wing government composition is
 ```{r}
 CPDS_US <-
   CPDS %>% 
-  filter(country == "USA") %>%
-  select(year, country, gov_right1, gov_cent1, vturn, pop, elderly, unemp, debt, realgdpgr)
+  filter(country == "USA") %>%                                                                  # Filter out cases not pertaining to USA
+  select(year, country, gov_right1, gov_cent1, vturn, pop, elderly, unemp, debt, realgdpgr)     # Only gather fields that are relevant to research question
 
 head(CPDS_US)
 ```
 
 ### 2
-By using machine learning to create a linear regression on this data, we observe several interesting relationships in the data. Here, elderly, unemployment rates, debt, and GDP data is being used to predict the prevalence of right wing ideologies in governemnt. We can see that the amount of elderly population as well as the amount of debt acrued in a single year are statistically significant. This tells us that an increase in the elderly population correlates to an increase in rightwing ideologies in government and that an increase in debt (as compared to GDP) also correlates to an increase of rightwing ideology within government. 
+By using machine learning to create a linear regression on this data, we observe several interesting relationships in the data. Here, elderly, unemployment rates, debt, and GDP data is being used to predict the prevalence of right wing ideologies in government. We can see that the amount of elderly population as well as the amount of debt acrued in a single year are statistically significant. This tells us that an increase in the elderly population correlates to an increase in rightwing ideologies in government and that an increase in debt (as compared to GDP) also correlates to an increase of rightwing ideology within government. 
 
 ```{r}
-linearMod <- lm(gov_right1 ~ elderly + unemp + debt + realgdpgr, data=CPDS_US)
+linearMod <- lm(gov_right1 ~ elderly + unemp + debt + realgdpgr, data=CPDS_US)   # Create a linear regession model 
 
 summary(linearMod)
 
@@ -83,7 +83,7 @@ When looking at demographic data, one of the first considerations is whether or 
 ```{r}
 ZipPopMean <-
   ZipPop %>%
-  mutate("mean2010" = mean(y.2010),
+  mutate("mean2010" = mean(y.2010),                                   # Create fields that store the average zip code opulation by year
          "mean2011" = mean(y.2011),
          "mean2012" = mean(y.2012),
          "mean2013" = mean(y.2013),
@@ -93,7 +93,7 @@ ZipPopMean <-
          ) %>%
   select(mean2010, mean2011, mean2012, mean2013, mean2014, mean2015, mean2016)
 
- avg_sizes <- ZipPopMean[!duplicated(ZipPopMean$mean2010),]
+ avg_sizes <- ZipPopMean[!duplicated(ZipPopMean$mean2010),]          # Remove any duplicate data
  
  avg_sizes
 ```
@@ -104,7 +104,7 @@ The data in ZipPop is obviously not in a tidy format. In its initial state, a ca
 ```{r}
 ZipPopNarrow <-
   ZipPop %>%
-  gather(Year, Population, -zip_code)
+  gather(Year, Population, -zip_code)   # Gather the cases to create tidy data in which each case represents zip code population by year
 head(ZipPopNarrow)
 nrow(ZipPopNarrow)
 ```
@@ -115,7 +115,7 @@ While the gather() function helped create tiny data, when the column headers for
 ```{r}
 ZipPopNarrow <-
   ZipPopNarrow %>%
-  mutate(Year = gsub(pattern = "[^0-9-]", "", Year))
+  mutate(Year = gsub(pattern = "[^0-9-]", "", Year))   # Use a regex to remove any characters from the Year field that are not numeric
 head(ZipPopNarrow)
 ```
 
@@ -126,9 +126,37 @@ Based on the earlier significance found between debt and right wing ideologies, 
 
 ```{r}
 CPDS_US %>%
-  ggplot(aes(x=year,y=debt ,fill=gov_right1))+
-  geom_bar(stat='identity',position='stack', width=1)
+  ggplot(aes(x=year,y=debt ,fill=gov_right1))+         # Aesthetics for the variables of interest
+  geom_bar(stat='identity',position='stack', width=1) + 
+  geom_line()
 
 ```
 
 ### 2
+Finally, I am interested in seeing the specifics of how economic and demographic factors are related to which party holds power in office. In order to do this, an additional column is created to store whether or not the government is controlled (>= 50%) by right wing ideology. Because right wing ideology pertains to the Republican party in the US, these instances hold the value "TRUE" for the field Republican. With a classification system in this data, we can now generate a decision tree using several important characterstics to predict whether or not Republicans will hold power. For this analysis, voter turnout, percent of elderly, percent of unemployment, and debt are being used in an effort to capture demographic and economic factors. As the decision tree is generated and displayed, the following observations are made: At the highest levels of elderly population, the Republican party holds office. However, for every other cut of elderly population, the party varies. At the lowest levels of elderly populations, debt is considered. Here we also see that higher levels of borrowing within a government relate to the Republican party. Interestingly enough, voter turnout and unemployment do not have an impact on this tree which further confirms the statistical significance found above.  
+
+```{r}
+CPDS_US_Party <-
+  CPDS_US %>%
+  mutate(Republican = if_else(gov_right1 >= 50, TRUE, FALSE)) %>%     # Create an additional field to determine whether or not Republicans hold power in that year
+  select(Republican, vturn, elderly, unemp, debt, year) %>%
+  arrange(year)
+
+head(CPDS_US_Party,20)
+```
+
+```{r}
+library(rpart)                                               # Load library to create a decision tree
+
+fit <- rpart(Republican ~ vturn + elderly + unemp + debt,    # Fit the decision tree to the new data frame
+   method="class", data=CPDS_US_Party)
+
+plot(fit, uniform=TRUE,                                      # Visualize the decision tree to understand its rules
+   main="Classification Tree for Republican Party\n")
+text(fit, use.n=TRUE, all=TRUE, cex=0.7)
+
+```
+
+## Conclusion
+
+This analysis resulted in a more in depth understanding of how demographic, economic, and ideological factors play a part in America's everchanging political landscape. We can see that above all, the amount of money that a government borrows in a year combined with the amount of elderly people in the population have notable effects on who is in office. One of my goals at the onset of this project was to gain a better understanding of who (or which party) has the best chance of winning the 2020 election. While it's not always easy to predict political events, this project has shown me that the Republican party (Donald Trump) will likely win the next election for a couple of reasons. First and foremost, COVID has had significant financial implications. Millions have become unemployed and the Treasury released a massive stimulus package (AKA borrowing money). Additionally, America's elderly white population continues to increase in number. These factors alone lead me to the conclusion that the Republican party has a better shot in 2020. All in all, this project gave me the opportunity to apply the knowledge I've gained throughout STAT 184 to a topic that I am interested in. Data that has been gathered from the web is not always in a tidy, or even "good", format and leveraging the skills gained in this class I have been able to wrangle, analyze, and train classifiers on this data to learn more about American politics and society.  
