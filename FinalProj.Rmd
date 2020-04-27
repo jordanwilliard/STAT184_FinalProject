@@ -78,16 +78,45 @@ summary(linearMod)
 ```
 
 ### 3 
+When looking at demographic data, one of the first considerations is whether or not the total population of a region is increasing or decreasing. One way to do this is by determining if the average population by zip code changes throughout the years. By using the reduction function mean(), we can observe this trend and notice that the average population has remained fairly stagnant since 2010, indicating that the total population of the United States has also been fairly constant in this time period. Further research (https://www.worldometers.info/world-population/us-population/) confirms this observation: Between 2010 and 2016, the total population of the United States has only risen from 309M to 323M, a 4% increase.  
+
+```{r}
+ZipPopMean <-
+  ZipPop %>%
+  mutate("mean2010" = mean(y.2010),
+         "mean2011" = mean(y.2011),
+         "mean2012" = mean(y.2012),
+         "mean2013" = mean(y.2013),
+         "mean2014" = mean(y.2014),
+         "mean2015" = mean(y.2015),
+         "mean2016" = mean(y.2016),
+         ) %>%
+  select(mean2010, mean2011, mean2012, mean2013, mean2014, mean2015, mean2016)
+
+ avg_sizes <- ZipPopMean[!duplicated(ZipPopMean$mean2010),]
+ 
+ avg_sizes
+```
+
+### 4
 The data in ZipPop is obviously not in a tidy format. In its initial state, a case represents a zip codes population across all years (2010-2016). Fortunately, a call to the wrangling function gather() can transform this into tidy data in which each case represents the population for a single zip code, in a single year. 
 
 ```{r}
 ZipPopNarrow <-
   ZipPop %>%
-  gather(Year, Value, -zip_code)
+  gather(Year, Population, -zip_code)
 head(ZipPopNarrow)
 nrow(ZipPopNarrow)
 ```
 
-### 4
+### 5
+While the gather() function helped create tiny data, when the column headers for years were turned into keys they kept the leading "y." which will eliminate the use of any arithmetic pertaining to years. To resolve this, a regular expression will be used to remove any characters from the Year column that are not numeric. 
+
+```{r}
+ZipPopNarrow <-
+  ZipPopNarrow %>%
+  mutate(Year = gsub(pattern = "[^0-9-]", "", Year))
+head(ZipPopNarrow)
+```
 
 ## Data Visualizations

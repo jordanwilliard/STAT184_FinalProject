@@ -583,23 +583,56 @@ summary(linearMod)</code></pre>
 </div>
 <div id="section-2" class="section level3">
 <h3>3</h3>
-<p>The data in ZipPop is obviously not in a tidy format. In its initial state, a case represents a zip codes population across all years (2010-2016). Fortunately, a call to the wrangling function gather() can transform this into tidy data in which each case represents the population for a single zip code, in a single year.</p>
-<pre class="r"><code>ZipPopNarrow &lt;-
+<p>When looking at demographic data, one of the first considerations is whether or not the total population of a region is increasing or decreasing. One way to do this is by determining if the average population by zip code changes throughout the years. By using the reduction function mean(), we can observe this trend and notice that the average population has remained fairly stagnant since 2010, indicating that the total population of the United States has also been fairly constant in this time period. Further research (<a href="https://www.worldometers.info/world-population/us-population/" class="uri">https://www.worldometers.info/world-population/us-population/</a>) confirms this observation: Between 2010 and 2016, the total population of the United States has only risen from 309M to 323M, a 4% increase.</p>
+<pre class="r"><code>ZipPopMean &lt;-
   ZipPop %&gt;%
-  gather(Year, Value, -zip_code)
-head(ZipPopNarrow)</code></pre>
-<pre><code>##   zip_code   Year Value
-## 1      601 y.2016 17800
-## 2      602 y.2016 39716
-## 3      603 y.2016 51565
-## 4      606 y.2016  6320
-## 5      610 y.2016 27976
-## 6      612 y.2016 63884</code></pre>
-<pre class="r"><code>nrow(ZipPopNarrow)</code></pre>
-<pre><code>## [1] 264960</code></pre>
+  mutate(&quot;mean2010&quot; = mean(y.2010),
+         &quot;mean2011&quot; = mean(y.2011),
+         &quot;mean2012&quot; = mean(y.2012),
+         &quot;mean2013&quot; = mean(y.2013),
+         &quot;mean2014&quot; = mean(y.2014),
+         &quot;mean2015&quot; = mean(y.2015),
+         &quot;mean2016&quot; = mean(y.2016),
+         ) %&gt;%
+  select(mean2010, mean2011, mean2012, mean2013, mean2014, mean2015, mean2016)
+
+ avg_sizes &lt;- ZipPopMean[!duplicated(ZipPopMean$mean2010),]
+ 
+ avg_sizes</code></pre>
+<pre><code>##   mean2010 mean2011 mean2012 mean2013 mean2014 mean2015 mean2016
+## 1 9434.269 9369.843 9445.568  9516.96 9593.275 9664.375 9724.409</code></pre>
 </div>
 <div id="section-3" class="section level3">
 <h3>4</h3>
+<p>The data in ZipPop is obviously not in a tidy format. In its initial state, a case represents a zip codes population across all years (2010-2016). Fortunately, a call to the wrangling function gather() can transform this into tidy data in which each case represents the population for a single zip code, in a single year.</p>
+<pre class="r"><code>ZipPopNarrow &lt;-
+  ZipPop %&gt;%
+  gather(Year, Population, -zip_code)
+head(ZipPopNarrow)</code></pre>
+<pre><code>##   zip_code   Year Population
+## 1      601 y.2016      17800
+## 2      602 y.2016      39716
+## 3      603 y.2016      51565
+## 4      606 y.2016       6320
+## 5      610 y.2016      27976
+## 6      612 y.2016      63884</code></pre>
+<pre class="r"><code>nrow(ZipPopNarrow)</code></pre>
+<pre><code>## [1] 264960</code></pre>
+</div>
+<div id="section-4" class="section level3">
+<h3>5</h3>
+<p>While the gather() function helped create tiny data, when the column headers for years were turned into keys they kept the leading “y.” which will eliminate the use of any arithmetic pertaining to years. To resolve this, a regular expression will be used to remove any characters from the Year column that are not numeric.</p>
+<pre class="r"><code>ZipPopNarrow &lt;-
+  ZipPopNarrow %&gt;%
+  mutate(Year = gsub(pattern = &quot;[^0-9-]&quot;, &quot;&quot;, Year))
+head(ZipPopNarrow)</code></pre>
+<pre><code>##   zip_code Year Population
+## 1      601 2016      17800
+## 2      602 2016      39716
+## 3      603 2016      51565
+## 4      606 2016       6320
+## 5      610 2016      27976
+## 6      612 2016      63884</code></pre>
 </div>
 </div>
 <div id="data-visualizations" class="section level2">
