@@ -1,5 +1,5 @@
 ---
-title: "FinalProject"
+title: "Final Project"
 author: "Jordan Williard"
 date: "4/26/2020"
 output: html_document
@@ -15,7 +15,7 @@ library(tidyr)
 
 
 ### Introduction
-America is on shaky political ground. The gap between left and right ideologies has been increasing to the point that the resulting tensions are almost to be expected. Fundamental differences between the ways that people view religion, abortion, immigration, and gun ownership, just to name a few, have created a polarized climate. As we approach the upcoming election cycle, it's valuable for campaigns and constituents alike to understand the ideological differences and shifts that are occuring in this nation. The following analysis is intended to observe these trends and answer the follow questions:  
+America is on shaky political ground. The gap between left and right ideologies has been increasing to the point that the resulting tensions are almost to be expected. Fundamental differences between the ways that people view religion, abortion, immigration, and gun ownership, just to name a few, have created a polarized climate. As we approach the upcoming election cycle, it's valuable for campaigns and constituents alike to understand the ideological differences and shifts that are occuring in this nation. The following analysis is intended to observe these trends and answer the follow questions: What demographic trends exist in the United States and how do they relate to ideology within government?
 
 
 ### Data Access
@@ -26,7 +26,7 @@ Two data sets will be used for this analysis. The first is called the Comparativ
 CPDS <- read.csv("CPDS-1960-2017-Update-2019.csv")
 ZipPop <- read.csv("pop-by-zip-code.csv")
 
-head(CPDS)
+# head(CPDS) This is commented out simply to create a cleaner html document. Since the data has 319 columns, it takes up a lot of space when knit to html. 
 head(ZipPop)
 ```
 
@@ -68,7 +68,7 @@ head(CPDS_US)
 ```
 
 ### 2
-By using machine learning to create a linear regression on this data, we observe several interesting relationships in the data. Here, elderly, unemployment rates, debt, and gdp data is being used to predict the prevalence of right wing ideologies in governemnt. We can see that the amount of elderly population as well as the amount of debt acrued in a single year are statistically significant. 
+By using machine learning to create a linear regression on this data, we observe several interesting relationships in the data. Here, elderly, unemployment rates, debt, and GDP data is being used to predict the prevalence of right wing ideologies in governemnt. We can see that the amount of elderly population as well as the amount of debt acrued in a single year are statistically significant. This tells us that an increase in the elderly population correlates to an increase in rightwing ideologies in government and that an increase in debt (as compared to GDP) also correlates to an increase of rightwing ideology within government. 
 
 ```{r}
 linearMod <- lm(gov_right1 ~ elderly + unemp + debt + realgdpgr, data=CPDS_US)
@@ -120,3 +120,15 @@ head(ZipPopNarrow)
 ```
 
 ## Data Visualizations
+
+### 1
+Based on the earlier significance found between debt and right wing ideologies, I wanted to get a better idea of how this has changed over time. The following bar graph shows the change in annual government debt with relation to year. Additionally, gov_right1 is added as an aesthetic so that we can see how the presense of ideologies in government relates to the accumulation of debt. The first interesting observation to note is that party lines shift roughly every 8 years. This makes sense based on the term limits that Presidents face along with the fact that most Presidents serve both of their terms. Furthermore, we can see a massive accumulation in debt in 2008. This isn't surprising based on the market crash that year, but it is interesting to see its relation to government spending. Remember, "debt" in this case is the percent of GDP that is borrowed. In this way, the graph tells us that the government has been borrowing a significant amount of money since 2008. Finally, with exception of Gerald Ford in the mid to late 70s, it's interesting to see that increased governmental borrowing is correlated with right wing governments for the entire span of this data. 
+
+```{r}
+CPDS_US %>%
+  ggplot(aes(x=year,y=debt ,fill=gov_right1))+
+  geom_bar(stat='identity',position='stack', width=1)
+
+```
+
+### 2
